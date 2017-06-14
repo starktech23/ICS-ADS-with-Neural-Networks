@@ -32,7 +32,7 @@ client.write_register(H,  0.0)
 client.write_register(V2, 0.0)
 client.write_register(L2, 10.0)
 client.write_register(L2L,10.0)
-
+"""
 print "Simulation will start when the time is 0, 25, 50 ,75"
 to = 0
 while 1:
@@ -44,6 +44,7 @@ while 1:
     # print to
     if to == 0 or to == 25 or to == 50 or to == 75:
         break
+"""
 #while True:
 hl = float(client.read_holding_registers(HL, 1).registers[0])
 ll = float(client.read_holding_registers(LL, 1).registers[0])
@@ -59,69 +60,99 @@ l2l= client.read_holding_registers(L2L, 1).registers[0]
 
 
 while True:
-	
-	sump = int(raw_input("Inlet Water is coming into sump(0,1): "))
-	
-	if sump == 1:
-		for i in range(0,100):
-		#print i
-			if i == 20:
-				ll=1
-				#print "Tank has 20 litres of water"
-			
-		#print i
-			if i == 90:
-				hl=1
-				#print "Tank has 50 litres of water"
+	while  True:
+		
+		sump = 1
+		
+		if sump == 1:
+			for i in range(0,100):
+			#print i
+				if i == 20:
+					ll=1
+					print "Tank has 20 litres of water"
 				
-				break
+			#print i
+				if i == 90:
+					hl=1
+					print "Tank has 50 litres of water"
+					
+					break
+		else:
+			ll=0
+			hl=0
+			sys.exit()
+		break
+
+	#tank_time = 
+	if hl == 1:
+		v1_1=1
 	else:
-		ll=0
-		hl=0
-		sys.exit()
-	break
-	
-#tank_time = 
-if hl == 1:
-	v1_1=1
+		v1_1=0
 
-power=2000
-current=[]
+	power=2000
+	current=[]
 
-for x in range(0,60):
-	fluc_vol=rd.randrange(180,240)
-	#print fluc_vol
-	current.append(fluc_vol)
-	
-	current_data=np.array(current)
-	#print current_data
-	
-	c=rd.choice(current_data)
-	#print c
-n=fluc_vol
-print n
-if 200 <= n <= 220 and (v1_1==1 or v1_2==1):
-	p=1
-	print p
-else:
-	p=0
-	print p
+	for x in range(0,60):
+		fluc_vol=rd.randrange(180,240)
+		#print fluc_vol
+		current.append(fluc_vol)
+		
+		current_data=np.array(current)
+		#print current_data
+		
+		c=rd.choice(current_data)
+		#print c
+	n=fluc_vol
+	print n
+	count_on=0
+	count_off=0
+	for i in range(0,20):
+		if 200 <= n <= 220 and (v1_1==1 or v1_2==1):
+			p=1
+			#print p
+			count_on += 1
+			for x in range(0,50):
+				if x == 10:
+					l2=10
+					break
+
+		else:
+			p=0
+			#print p
+			count_off
+	print count_on
+	print count_off
+
+	if  l2 == 10:
+		if h==1:
+			t1 = t1 + (1.0*heat_coefficient_2)/(1.0*l2)#water is heated using Q=mc(T2-T1   ) 
+	    	print t1
+	 
+	if t1 == 150:
+		v2=1
+
+	if v2==1:
+		for x in range(0,100):
+			if i==20:
+				l2l=1	
 
 
-client.write_register(HL, hl)
-client.write_register(LL, ll)
-client.write_register(V1_1, v1_1)
-client.write_register(V1_2, v1_2)
-client.write_register(P, p)
-client.write_register(L1, l1)
-client.write_register(T1, t1)
-client.write_register(H, h)
-client.write_register(V2, v2)
-client.write_register(L2, l2)
-client.write_register(L2L, l2l)
+
+
+	client.write_register(HL, hl)
+	client.write_register(LL, ll)
+	client.write_register(V1_1, v1_1)
+	client.write_register(V1_2, v1_2)
+	client.write_register(P, p)
+	client.write_register(L1, l1)
+	client.write_register(T1, t1)
+	client.write_register(H, h)
+	client.write_register(V2, v2)
+	client.write_register(L2, l2)
+	client.write_register(L2L, l2l)
 
 
 
 
-printvalues("field", hl, ll, v1_1, v1_2, p, l1, t1, h, v2, l2, l2l)
-sys.exit()
+	printvalues("field", hl, ll, v1_1, v1_2, p, l1, t1, h, v2, l2, l2l)
+	#sys.exit()
