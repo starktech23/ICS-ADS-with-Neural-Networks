@@ -87,22 +87,7 @@ for i in range(0,SIM_TIME):
 
 	"""         	
 	#Segment of Code of Operation of plant by checking pump logic------
-	value_lowlevel=20
-	value_levelB1=20
-	value_lowlevel2=20
-	valve1_1=1#By default open
-	if lowlevel == 0:            
-		valve1_1=1
-	elif lowlevel==1 and lowlevel2==0:
-		valve1_1=0
-	#Computing pump current
-	power=2000
-	current_lst=[]
-	for x in range(0,60):
-		fluc_vol=rd.randrange(180,240)
-		current=fluc_vol//power #I=V/P
-		current_lst.append(current)
-		current_data=np.array(current)
+	
 
 	n=fluc_vol#flutuating voltage
 	#print n
