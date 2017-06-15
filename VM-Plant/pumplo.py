@@ -32,6 +32,39 @@ while True:
 if hl == 1:
 	v1_1=1
 
+
+def timer():
+	time_lst = []
+
+	curr_time = int(time.time()%60)
+	print curr_time
+
+	if curr_time>59 and curr_time % 60 != 0:
+	    curr_time = curr_time%60
+	elif curr_time%60==0:
+	    curr_time = 1
+
+	for i in range(0,4):
+	    if (curr_time+i)%60==0:
+	        time_lst.append(1)
+	    else:
+	        time_lst.append((curr_time+i)%60)
+
+	return time_lst
+
+
+
+
+timer()
+
+
+
+
+
+
+
+
+
 power=2000
 current=[]
 
