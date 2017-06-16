@@ -1,5 +1,5 @@
-FIELD_IP = '172.27.22.45' #ip will change according to Virtual Machines IP's
-FIELD_PORT = 6060
+FIELD_IP = '172.27.22.102' #ip will change according to Virtual Machines IP's
+FIELD_PORT = 6062
 
 #SIM_TIME = 100
 #SIM_STEP = 0.1
