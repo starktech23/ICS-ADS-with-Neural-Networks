@@ -49,7 +49,7 @@ levelB1  = client.read_holding_registers(L1, 1).registers[0]
 tempB1   = client.read_holding_registers(T1, 1).registers[0]
 heater   = client.read_holding_registers(H, 1).registers[0]
 valve2   = client.read_holding_registers(V2, 1).registers[0]
-lowlevel2= client.read_holding_registers(L2L, 1).registers[0]
+level2= client.read_holding_registers(L2L, 1).registers[0]
 #--------------Logic of Filling the SUMP continuously-----------
 
 
@@ -57,9 +57,9 @@ value_lowlevel=20
 value_levelB1=20
 value_lowlevel2=20
 Sump_Tank = 1
+#Simulation will run according to the sim time
 for i in range(0,SIM_TIME):
 
-#while True:
 	while  True:
 		
 		
@@ -69,32 +69,18 @@ for i in range(0,SIM_TIME):
 				
 			else:
 				lowlevel=0
-		break
-	#----------------------------------------------------------------
-		#Funtion to fill tank
-		 # def fill_tank(check_amount):
-		 # 	for i in range(0,100):
-		 # 		if i <= check_amount:
-		 # 			lowlevel2=1
-		 # 		else:
-		 # 			lowlevel2=0
-		#Function to empty tank
-	"""
-		def empty_tank(check_amount):
-			for i in count():
-	    		if i >= check_amount:
-	    				break
-
-	"""         	
+		break        	
 	#Segment of Code of Operation of plant by checking pump logic------
-	value_lowlevel=20
-	value_levelB1=20
-	value_lowlevel2=20
-	valve1_1=1#By default open
+	value_lowlevel=20 #constant for low level sensor of sump
+	value_levelB1=20#constant for low level of boiler
+	value_lowlevel2=20#constant for low level of condensed tank 
+	valve1_1=1 #By default open as for a 3 way valve one side should be opened
+	
 	if lowlevel == 0:            
 		valve1_1=1
-	elif lowlevel==1 and lowlevel2==0:
+	elif lowlevel==1 and level2==0:
 		valve1_1=0
+	
 	#Computing pump current
 	power=2000
 	current_lst=[]
@@ -110,8 +96,8 @@ for i in range(0,SIM_TIME):
 	startTime=0
 	duration=0
 	i=0
-	#for i in range(0,4):
-
+	#Noting Pump operation time of on and not on
+	time_list=[]
 	if 200 <= n and n <= 220 and (valve1_1 == 1 or valve1_2 == 1):
 		pump=1
 		if startTime==0:
@@ -125,32 +111,39 @@ for i in range(0,SIM_TIME):
 			stopTime=time.time()
 			#print stopTime
 			duration=stopTime-startTime
+			time_list.append(duration)
 			print duration
 			
 	else:	
 		pump=0
 		stopTime=0
 		duration=stopTime-startTime
+		
 		#sys.exit()
 	
-	if levelB1 >= value_levelB1:
+	if levelB1 >= value_levelB1 and levelB1: 
 		heater=1
-		tempB1=tempB1+(3.0*heat_coefficient)/(3.0*levelB1)
-		levelB1=levelB1+10
-	else:
-		heater=0
-		tempB1 = tempB1 - (3.0*heat_coefficient2)/(3.0*levelB1)
-	if tempB1 >=112 and tempB1 <= 130:
+		tempB1=tempB1+(3.0*heat_coefficient)/(3.0*levelB1) 
+		levelB1=levelB1+4	
+	
+	if tempB1 >=112 and tempB1 <= 130: 
 		valve2=1
-	if tempB1 > 130:
-		safety_valve=1
+		level2=level2+10
+		# levelB1=levelB1+2
 
-	if valve2 == 1:
-		
-		if lowlevel2 >= value_lowlevel2:
-			valve1_2=1
-		else:
-			valve1_2=0
+	if tempB1 > 130: 
+		heater=0
+		tempB1=tempB1-2
+	if level2 >= levelB1+3:
+		valve1_1=0
+		valve1_2=1
+
+
+
+	
+	
+
+
 
 
 	# for i in range(0,SIM_TIME):
@@ -158,7 +151,7 @@ for i in range(0,SIM_TIME):
 	# 		plantwithvalve1_1open()
 	# 	else:
 	# 		plantwithvalve1_2open()	
-
+	 
 
 	client.write_register(LL, lowlevel)
 	client.write_register(V1_1, valve1_1)
@@ -166,11 +159,16 @@ for i in range(0,SIM_TIME):
 	client.write_register(P, pump)
 	client.write_register(T1, tempB1)
 	client.write_register(H, heater)
-	client.write_register(V2, valve2)
-	client.write_register(L2L, lowlevel2)
+	if valve2 == 1:
+		client.write_register(V2, valve2)
+	else:
+		client.write_register(V2, valve2)
+	client.write_register(L2L, level2)
 
 
 
 
-	printvalues("field",lowlevel, valve1_1, valve1_2, pump, levelB1, tempB1, heater, valve2, lowlevel2)
+	printvalues("field",lowlevel, valve1_1, valve1_2, pump, levelB1, tempB1, heater, valve2, level2)
 		#sys.exit()
+
+#print time_list
