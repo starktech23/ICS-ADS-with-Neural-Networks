@@ -1,35 +1,64 @@
-FIELD_IP = '172.27.22.102' #ip will change according to Virtual Machines IP's
-FIELD_PORT = 6062
 
-#SIM_TIME = 100
+
+OPC_IP = '172.27.30.17'
+OPC_PORT = 6060
+
+FIELD_IP = '172.27.30.17'#ip wiSumpLow change according to Virtual Machines IP's
+FIELD_PORT = 6061
+
+
+SIM_TIME = 150
 #SIM_STEP = 0.1
 #Process Variables
-HL  = 0
-LL  = 1
-V1_1= 2
-V1_2= 3
-P   = 4
-L1  = 5
-T1  = 6
-H   = 7
-V2  = 8
-L2  = 9
-L2L = 10
-heat_coefficient = 10
-heat_coefficient_2 = 50
 
-def printvalues(mode, HL, LL, V1_1, V1_2, P, L1, T1, H, V2, L2, L2L):
-    st =   (mode+",\t" 
-            "HL: "+str("{0:.4f}".format(HL))+",\t"
-            "LL: "+str("{0:.4f}".format(LL))+",\t"
-            "V1_1: "+str("{0:.4f}".format(V1_1))+",\t"
-            "V1_2:  "+str("{0:.4f}".format(V1_2))+",\t"
-            "P: "+str("{0:.4f}".format(P))+",\t"
-            "L1: "+str("{0:.4f}".format(L1))+",\t"
-            "T1: "+str("{0:.4f}".format(T1))+",\t"
-            "H: "+str("{0:.4f}".format(H))+",\t"
-            "V2: "+str("{0:.4f}".format(V2))+",\t"
-            "L2: "+str("{0:.4f}".format(L2))+",\t"
-            "L2L: "+str("{0:.4f}".format(L2L))+",\t"
+SumpLow          = 0
+ValvePos_S       = 1
+ValvePos_CT      = 2
+Pump             = 3
+LevelBoiler      = 4
+TempBoiler       = 5
+Heater           = 6
+SteamOutlet      = 7
+CTankLevel       = 8
+
+# L2L = 9
+heat_coefficient = 200
+heat_coefficient_2 = 50
+#if V2 == 7:
+   
+def printvalues(SumpLow, ValvePos_S, ValvePos_CT,Pump, LevelBoiler, TempBoiler, Heater, SteamOutlet, CTankLevel):
+    if SteamOutlet == 0.00:
+        st =   ( 
+           
+
+            "SumpLow: "+str("{0:.1f}".format(SumpLow))+","
+            "ValvePos_S: "+str("{0:.1f}".format(ValvePos_S))+","
+            "ValvePos_CT:  "+str("{0:.1f}".format(ValvePos_CT))+","
+           
+            "Pump: "+str("{0:.1f}".format(Pump))+","
+            "LevelBoiler: "+str("{0:.2f}".format(LevelBoiler))+","
+            "TempBoiler: "+str("{0:.2f}".format(TempBoiler))+","
+            "Heater: "+str("{0:.1f}".format(Heater))+","
+            "SteamOut"+str(" {0:.1f} ".format(SteamOutlet))+","
+            #"L2: "+str("{0:.4f}".format(L2))+",\t"
+            "CTankLevel: "+str("{0:.2f}".format(CTankLevel))+","
          )     
-    print st
+        print st,'\n' 
+    
+    if SteamOutlet==1.00:
+        st1 =   ( 
+           
+
+            "SumpLow: "+str("{0:.1f}".format(SumpLow))+","
+            "ValvePos_S: "+str("{0:.1f}".format(ValvePos_S))+","
+            "ValvePos_CT:  "+str("{0:.1f}".format(ValvePos_CT))+","
+            
+            "Pump: "+str("{0:.1f}".format(Pump))+","
+            "LevelBoiler: "+str("{0:.2f}".format(LevelBoiler))+","
+            "TempBoiler: "+str("{0:.2f}".format(TempBoiler))+","
+            "Heater: "+str("{0:.1f}".format(Heater))+","
+            "SteamOut: "+str("'\033[1;42m {0:.1f} \033[1;m'".format(SteamOutlet))+","
+            #"L2: "+str("{0:.4f}".format(L2))+",\t"
+            "CTankLevel: "+str("{0:.2f}".format(CTankLevel))+","
+         )
+        print st1,'\n'     

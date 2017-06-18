@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#RTU Server
+#OPC Server
 from config import *
 from pymodbus.server.sync import StartTcpServer
 
@@ -16,4 +16,4 @@ store = ModbusSlaveContext(di = ModbusSequentialDataBlock(0, [0]*100))
 context = ModbusServerContext(slaves=store, single=True)
 identity = ModbusDeviceIdentification()
 
-StartTcpServer(context, identity=identity, address=(FIELD_IP, FIELD_PORT)
+StartTcpServer(context, identity=identity, address=(OPC_IP, OPC_PORT))
