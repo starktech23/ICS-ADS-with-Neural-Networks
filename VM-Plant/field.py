@@ -16,10 +16,8 @@ log.setLevel(logging.INFO)
 client = ModbusTcpClient(FIELD_IP, FIELD_PORT)
 client.connect()
 
-opc_client = ModbusTcpClient(OPC_IP,OPC_PORT)
-opc_client.connect()
-
-
+#opc_client = ModbusTcpClient(OPC_IP,OPC_PORT)
+#opc_client.connect()
 
 client.write_register(SumpLow, 1.0)
 client.write_register(ValvePos_S, 1.0)
@@ -42,10 +40,12 @@ heater   	   = client.read_holding_registers(Heater, 1).registers[0]
 valve2   	   = client.read_holding_registers(SteamOutlet, 1).registers[0]
 level2   	   = client.read_holding_registers(CTankLevel, 1).registers[0]
 safety_valve   = client.read_holding_registers(SafeValve, 1).registers[0]
+
 #--------------Logic of Filling the SUMP continuously-----------
 value_SumpLow=20
 data_lst=[]
 #Simulation will run according to the sim time
+current_lst=[]
 for i in range(0,SIM_TIME):
 
 	while  True:
@@ -53,18 +53,18 @@ for i in range(0,SIM_TIME):
 		
 		for i in range(0,50):
 			if i <= value_SumpLow:
-				SumpLow=1
+				SumpLow=1 #low level feedback becomes 1
 				
 			else:
-				SumpLow=0
+				SumpLow=0 #low level feedback becomes 0
 		break        	
 	#Segment of Code of Operation of plant by checking pump logic------
 
-	value_SumpLow=20  #constant for low level sensor of sump
+	value_SumpLow=20  #Initializing low level set point of sump
 	value_levelB1=20  #constant for low level of boiler
 	value_CTankLow=20 #constant for low level of condensed tank 
 	valve1_1=1        #By default open as for a 3 way valve one side should be opened
-	
+	value_tempB1=30
 	if SumpLow == 0:            
 		valve1_1=1
 	elif SumpLow==1 and level2==0:
@@ -73,11 +73,11 @@ for i in range(0,SIM_TIME):
 	#Computing pump current
 	power=2000
 	current_lst=[]
-	for x in range(0,60):
-		fluc_vol=rd.randrange(180,240)
-		current=power/fluc_vol #I=P/V
-		current_lst.append(current)
-		current_data=np.array(current_lst)
+	#for x in range(0,60):
+	fluc_vol=rd.randrange(180,240)
+	current=power/fluc_vol #I=P/V
+	current_lst.append(current)
+	current_data=np.array(current_lst)
 
 
 	fluc_v=fluc_vol         #flutuating voltage
@@ -95,7 +95,7 @@ for i in range(0,SIM_TIME):
 	if levelB1 >= value_levelB1: #(and 150<=tempB1<=20):)
 			pump=0
 			time_list=[]
-			time.sleep(rd.randrange(0,1))
+			time.sleep(rd.randrange(0,4))
 			stopTime=time.time()
 			for i in range(0,SIM_TIME):
 				duration=stopTime-startTime
@@ -109,14 +109,14 @@ for i in range(0,SIM_TIME):
 		duration=stopTime-startTime
 	
 	def boileraction(): #Function turns on the heater when condition is met
-		if levelB1 >= value_levelB1:
+		if levelB1 >= value_levelB1 and tempB1 >= value_tempB1:
 			heater=1
 		if levelB1 >=544:
 			heater=0
 		return heater
 	
 	def boileraction1(tempB1): #Function Computes the Temperature of boiler
-		if levelB1 >=value_levelB1:
+		if levelB1 >=value_levelB1 and tempB1 >= value_tempB1:
 			tempB1=tempB1=tempB1+(3.0*heat_coefficient)/(3.0*levelB1)
 		if levelB1 >=544:
 			tempB1=tempB1-1
@@ -129,7 +129,7 @@ for i in range(0,SIM_TIME):
 		return tempB1 
 	
 	def boileraction2(levelB1): #Function Computes the Level of Boiler
-		if levelB1 >= value_levelB1:
+		if levelB1 >= value_levelB1 and tempB1 >= value_tempB1:
 			levelB1=levelB1+4
 		if levelB1 >=990:
 			levelB1=990
@@ -137,10 +137,7 @@ for i in range(0,SIM_TIME):
 		return levelB1
 	
 	if tempB1 >= 112 and tempB1 <= 130: 
-		if level2 == 790:
-			level2=790
-		else:
-			level2=level2+10
+		level2=level2+10
 		valve2=1
 		safety_valve=0
 	
@@ -149,6 +146,7 @@ for i in range(0,SIM_TIME):
 		valve1_1=0
 		valve1_2=0
 		valve2=0
+		level2=860
 
 
 	if tempB1 > 130 and tempB1 < 170:
@@ -209,7 +207,7 @@ for i in range(0,SIM_TIME):
 	# data_lst.append(ctankl)
 	csaftety=safety_valve
 	# data_lst.append(csaftety)
-	data_lst.append([cSumplow,cvalv1_1,cvalv1_2,cpump,clevb,ctemb,cheat,cvalve2,ctankl,csaftety,duration,current])
+	data_lst.append([cSumplow,cvalv1_1,cvalv1_2,cpump,clevb,ctemb,cheat,cvalve2,ctankl,csaftety])
 
 
 
@@ -224,7 +222,7 @@ for row in data_lst:
     out.write('\n')
 out.close()
 
-
+print current_lst
 # print data_lst
 # print time_list
 # print da
