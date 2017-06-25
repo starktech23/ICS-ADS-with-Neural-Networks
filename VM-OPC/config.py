@@ -1,14 +1,14 @@
 
 
-OPC_IP = '172.27.30.17'
+OPC_IP = '172.27.30.62'
 OPC_PORT = 6060
 
-FIELD_IP = '172.27.30.17'#ip wiSumpLow change according to Virtual Machines IP's
+FIELD_IP = '172.27.30.62'#ip wiSumpLow change according to Virtual Machines IP's
 FIELD_PORT = 6061
 
 
-SIM_TIME = 150
-#SIM_STEP = 0.1
+SIM_TIME = 260
+SIM_STEP = 0.1
 #Process Variables
 
 SumpLow          = 0
@@ -20,6 +20,7 @@ TempBoiler       = 5
 Heater           = 6
 SteamOutlet      = 7
 CTankLevel       = 8
+SafeValve        = 9
 
 # L2L = 9
 heat_coefficient = 200
@@ -37,11 +38,12 @@ def printvalues(SumpLow, ValvePos_S, ValvePos_CT,Pump, LevelBoiler, TempBoiler, 
            
             "Pump: "+str("{0:.1f}".format(Pump))+","
             "LevelBoiler: "+str("{0:.2f}".format(LevelBoiler))+","
-            "TempBoiler: "+str("{0:.2f}".format(TempBoiler))+","
+            "TempBoiler: "+str("{0:.3f}".format(TempBoiler))+","
             "Heater: "+str("{0:.1f}".format(Heater))+","
             "SteamOut"+str(" {0:.1f} ".format(SteamOutlet))+","
             #"L2: "+str("{0:.4f}".format(L2))+",\t"
             "CTankLevel: "+str("{0:.2f}".format(CTankLevel))+","
+
          )     
         print st,'\n' 
     

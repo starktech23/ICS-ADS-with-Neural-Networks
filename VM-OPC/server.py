@@ -7,7 +7,7 @@ from pymodbus.device import ModbusDeviceIdentification
 from pymodbus.datastore import ModbusSequentialDataBlock
 from pymodbus.datastore import ModbusSlaveContext, ModbusServerContext
 
-import logging
+import logging	
 logging.basicConfig()
 log = logging.getLogger()
 log.setLevel(logging.INFO)
