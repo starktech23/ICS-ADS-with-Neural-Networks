@@ -46,6 +46,7 @@ value_SumpLow=20
 data_lst=[]
 #Simulation will run according to the sim time
 current_lst=[]
+time.sleep(2)
 for i in range(0,SIM_TIME):
 
 	while  True:
@@ -95,7 +96,7 @@ for i in range(0,SIM_TIME):
 	if levelB1 >= value_levelB1: #(and 150<=tempB1<=20):)
 			pump=0
 			time_list=[]
-			time.sleep(rd.randrange(0,4))
+			time.sleep(rd.randrange(1,3))
 			stopTime=time.time()
 			for i in range(0,SIM_TIME):
 				duration=stopTime-startTime
@@ -187,26 +188,17 @@ for i in range(0,SIM_TIME):
 	
 	
 	
-	cSumplow=SumpLow
-	# data_lst.append(cSumplow)
-	cvalv1_1=valve1_1
-	# data_lst.append(cvalv1_1)
-	cvalv1_2=valve1_2
-	# data_lst.append(cvalv1_2)
-	cpump=pump
-	# data_lst.append(cpump)
-	clevb=levelB1
-	# data_lst.append(clevb)
-	ctemb=tempB1
-	# data_lst.append(ctemb)
-	cheat=heater
-	# data_lst.append(cheat)
-	cvalve2=valve2
-	# data_lst.append(cvalve2)
-	ctankl=level2
-	# data_lst.append(ctankl)
-	csaftety=safety_valve
-	# data_lst.append(csaftety)
+	cSumplow=float(SumpLow)
+
+	cvalv1_1=float(valve1_1)
+	cvalv1_2=float(valve1_2)
+	cpump=float(pump)
+	clevb=float(levelB1)
+	ctemb=float(tempB1)
+	cheat=float(heater)
+	cvalve2=float(valve2)
+	ctankl=float(level2)
+	csaftety=float(safety_valve)
 	data_lst.append([cSumplow,cvalv1_1,cvalv1_2,cpump,clevb,ctemb,cheat,cvalve2,ctankl,csaftety])
 
 
@@ -218,7 +210,7 @@ da=np.array(data_lst)
 out = open('out.csv', 'w')
 for row in data_lst:
     for column in row:
-        out.write('%d,' % column)
+        out.write('%.2f,' % column)
     out.write('\n')
 out.close()
 
