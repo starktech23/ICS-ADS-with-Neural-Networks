@@ -64,3 +64,9 @@ def printvalues(SumpLow, ValvePos_S, ValvePos_CT,Pump, LevelBoiler, TempBoiler, 
             "CTankLevel: "+str("{0:.2f}".format(CTankLevel))+","
          )
         print st1,'\n'     
+
+seq=30
+padding=10
+batch_size = 26
+nb_classes = 1
+nb_epoch = 10
