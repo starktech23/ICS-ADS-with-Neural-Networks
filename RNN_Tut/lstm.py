@@ -138,4 +138,4 @@ testPredictPlot[len(trainPredict)+(look_back*2)+1:len(dataset)-1, :] = testPredi
 plt.plot(scaler.inverse_transform(dataset))
 plt.plot(trainPredictPlot)
 plt.plot(testPredictPlot)
-plt.show()
+# plt.show()

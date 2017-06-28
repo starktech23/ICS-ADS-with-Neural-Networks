@@ -40,8 +40,8 @@ y = []
     # t = time.time()
 v = []
 for t in x:
-    v.append(t[0])
-print v
+    
+
                
         # if len(x) == seq:
         #     x = np.array([x])
