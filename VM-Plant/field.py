@@ -46,7 +46,7 @@ value_SumpLow=20
 data_lst=[]
 #Simulation will run according to the sim time
 current_lst=[]
-time.sleep(2)
+time.sleep(3)
 for i in range(0,SIM_TIME):
 
 	while  True:
@@ -112,14 +112,14 @@ for i in range(0,SIM_TIME):
 	def boileraction(): #Function turns on the heater when condition is met
 		if levelB1 >= value_levelB1 and tempB1 >= value_tempB1:
 			heater=1
-		if levelB1 >=544:
+		if levelB1 >=554:
 			heater=0
 		return heater
 	
 	def boileraction1(tempB1): #Function Computes the Temperature of boiler
 		if levelB1 >=value_levelB1 and tempB1 >= value_tempB1:
 			tempB1=tempB1=tempB1+(3.0*heat_coefficient)/(3.0*levelB1)
-		if levelB1 >=544:
+		if levelB1 >=514:
 			tempB1=tempB1-1
 		if levelB1 >= 990:
 			valve2=0
@@ -133,7 +133,7 @@ for i in range(0,SIM_TIME):
 		if levelB1 >= value_levelB1 and tempB1 >= value_tempB1:
 			levelB1=levelB1+4
 		if levelB1 >=990:
-			levelB1=990
+			levelB1=590
 
 		return levelB1
 	
@@ -142,7 +142,7 @@ for i in range(0,SIM_TIME):
 		valve2=1
 		safety_valve=0
 	
-	if tempB1 >= 90 and tempB1 <= 130 and levelB1 >= 990:
+	if tempB1 >= 90 and tempB1 <= 120 and levelB1 >= 990:
 		safety_valve=1 
 		valve1_1=0
 		valve1_2=0
@@ -157,7 +157,7 @@ for i in range(0,SIM_TIME):
 		valve1_2=0
 		safety_valve=0
 	
-	if tempB1 >= 170 and tempB1 <= 200:
+	if tempB1 >= 190 and tempB1 <= 210: #malware to blast the boiler
 		safety_valve=1
 		valve2=0
 		level2=level2-4
@@ -207,7 +207,7 @@ for i in range(0,SIM_TIME):
 	printvalues(SumpLow, valve1_1, valve1_2, pump, levelB1, tempB1, heater, valve2, level2,safety_valve)
 		#sys.exit()
 da=np.array(data_lst)
-out = open('out.csv', 'w')
+out = open('malout.csv', 'w')
 for row in data_lst:
     for column in row:
         out.write('%.2f,' % column)

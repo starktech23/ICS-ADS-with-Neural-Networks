@@ -61,9 +61,9 @@ for i in range(0,SIM_TIME):
 	
 print "Data Logged..."
 Data = np.array(data_lst,"\n")
-np.save("new_train_data", Data)
+np.save("mal_test_data", Data)
 
-out = open('new_log.csv', 'w')
+out = open('mal_log.csv', 'w')
 for row in data_lst:
     for column in row:
         out.write('%.2f,' % column)

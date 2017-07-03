@@ -18,44 +18,33 @@ from sklearn.cross_validation import train_test_split
 #Getting Dataset
 X = np.load("train_data.npy")
 Y=np.ones((260,10))
-# scaler = MinMaxScaler(feature_range=(0, 1))
-# rescaledX = scaler.fit_transform(X)
-# binarizer = Binarizer(threshold=0.0).fit(X)
-# binaryX = binarizer.transform(X)
-# scaler = Normalizer().fit(X)
-# normalizedX = scaler.transform(X)
+
 #Splitting Dataset
-train_size=int(len(X)*0.5)
+train_size=int(len(X)*0.80)
 test_size=len(X)-train_size
 X_train,X_test=X[0:train_size,:],X[train_size:len(X),:]
 Y_train,Y_test=Y[0:train_size,:],Y[train_size:len(Y),:]
 X_train=np.array(X_train)
 X_test=np.array(X_test)
-# X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
-print X_train
-print X_test
-print Y_train
-print Y_test
+
 X_train = X_train.astype('int32')
 X_test = X_test.astype('int32')
 length=10
 #Reshape array
-X_train=np.reshape(X_train,(130,1,length))
-Y_train=np.reshape(Y_train,(130,1,length))
-X_test=np.reshape(X_test,(130,1,length))
-Y_test=np.reshape(Y_test,(130,1,length))
+X_train=np.reshape(X_train,(208,1,length))
+Y_train=np.reshape(Y_train,(208,1,length))
+X_test=np.reshape(X_test,(52,1,length))
+Y_test=np.reshape(Y_test,(52,1,length))
 #Configure Net
 model=Sequential()
-model.add(LSTM(100,input_shape=(1,length),return_sequences=True,activation='sigmoid'))
+model.add(LSTM(10,batch_input_shape=(1,1,length),return_sequences=True,activation='sigmoid'))
 print model.input_shape
 print model.output_shape
-model.add(Dense(length))
-model.add(Dropout(0.33))
+model.add(Dense(10,activation='sigmoid'))
 model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
-history=model.fit(X_train,X_train,validation_data=(X_test, X_test),epochs=10,batch_size=1,verbose=1,shuffle=False)
+history=model.fit(X_train,Y_train,validation_data=(X_test, Y_test),epochs=10,batch_size=1,verbose=1,shuffle=False)
 print(model.summary())
- # train your model  
-# history = model.fit(train_data, train_labels,nb_epoch=10, batch_size=1)    
+   
 print(history.history.keys())  
    
 plt.figure(1)  
@@ -85,12 +74,15 @@ score = model.evaluate(X_test, Y_test, verbose=0)
 print('Test score:', score[0])
 print('Test accuracy:', score[1])
 
-prediction = model.predict(X_test, batch_size=1, verbose=0)
-print prediction
-# cmodel_json = model.to_json()
+pred= model.predict(X_train,batch_size=1,verbose=1)
 
-# with open("new1_model.json","w") as json_file:
-#  	json_file.write(cmodel_json)
-# model.save_weights("new2_model_weights.h5", overwrite=True)
+predict=np.reshape(pred,(208,10))
+plt.plot(predict)
+plt.show()
+# model_json = model.to_json()
+
+# with open("final_model.json","w") as json_file:
+#  	json_file.write(model_json)
+# model.save_weights("final_model_weights.h5", overwrite=True)
 # print("Saved the Model to Disk")
 
