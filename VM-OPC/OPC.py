@@ -26,12 +26,12 @@ data_lst=[]
 def openIDS_TrainNN():
     try:
         subprocess.call(["xdotool key ctrl+t"])
-        subprocess.call(["python","ids_train.py"])
+        subprocess.call(["python","ids.py"])
     except ImportError:
         print 'Command not executed'
         os.exit(1)
 
-#time.sleep(2)
+time.sleep(2)
 for i in range(0,SIM_TIME):
 	time.sleep(2)
 	SumpLow      = field_client.read_holding_registers(SumpLow, 1).registers[0] #float(field_client.read_holding_registers(SumpLow, 1).registers[0])
@@ -61,9 +61,9 @@ for i in range(0,SIM_TIME):
 	
 print "Data Logged..."
 Data = np.array(data_lst,"\n")
-np.save("mal_test_data", Data)
+np.save("mal2_test_data", Data)
 
-out = open('mal_log.csv', 'w')
+out = open('mal2_log.csv', 'w')
 for row in data_lst:
     for column in row:
         out.write('%.2f,' % column)

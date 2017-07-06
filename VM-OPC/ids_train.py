@@ -74,11 +74,12 @@ score = model.evaluate(X_test, Y_test, verbose=0)
 print('Test score:', score[0])
 print('Test accuracy:', score[1])
 
-pred= model.predict(X_train,batch_size=1,verbose=1)
-
-predict=np.reshape(pred,(208,10))
+pred= model.predict(X_test,batch_size=1,verbose=1)
+print pred
+predict=np.reshape(pred,(52,10))
 plt.plot(predict)
 plt.show()
+print pred
 # model_json = model.to_json()
 
 # with open("final_model.json","w") as json_file:

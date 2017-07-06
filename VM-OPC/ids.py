@@ -8,6 +8,7 @@ from config import *
 from pymodbus.client.sync import ModbusTcpClient
 import time
 import numpy as np
+import itertools
 import logging
 from sklearn.cross_validation import train_test_split
 
@@ -29,7 +30,7 @@ log.setLevel(logging.INFO)
 
 fig = plt.figure()
 ax = fig.add_subplot(1,1,1)
-ax.set_ylim([0,1])
+
 
 json_file = open('final_model.json', 'r')
 model_json = json_file.read()
@@ -37,62 +38,22 @@ json_file.close()
 model = model_from_json(model_json)
 model.load_weights("final_model_weights.h5")
 
-test=np.load("mal_test_data.npy")
+test=np.load("mal1_test_data.npy")
 test_data=np.reshape(test,(260,1,10))
 
-# y = []
-# def update(i):
-#     t = time.time()
-#     x = []
-#     while True:
-#         while time.time()-t < SIM_STEP:
-#             continue
-#         t = time.time()
-#         l1 = float(opc1_client.read_holding_registers(L1, 1).registers[0])
-#         l2 = float(opc2_client.read_holding_registers(L2, 1).registers[0])
-#         t1 = float(opc1_client.read_holding_registers(T1, 1).registers[0])
-#         t2 = float(opc2_client.read_holding_registers(T2, 1).registers[0])
-#         v1 = opc2_client.read_holding_registers(V1, 1).registers[0]
-#         v2 = opc1_client.read_holding_registers(V2, 1).registers[0]
-#         p  = opc2_client.read_holding_registers( P, 1).registers[0]
-#         f1 = opc2_client.read_holding_registers(F1, 1).registers[0]
-#         f2 = opc1_client.read_holding_registers(F2, 1).registers[0]
-#         f3 = opc2_client.read_holding_registers(F3, 1).registers[0]
-#         h  = opc1_client.read_holding_registers( H, 1).registers[0]
 
-#         v = [l1, l2, t1, t2, v1, v2, p, f1, f2, f3, h]
-#         x.append(v)
-#         if len(x) == seq:
-#             x = np.array([x])
-
-#             prediction = model.predict(x, batch_size=1, verbose=0)[0][0]
-#             if prediction < 0.9:
-#                 prediction = prediction - 0.15
-#             score = "{0:.2f}".format(prediction)
-#             y.append(score)
-#             ax.clear()
-#             ax.set_title("Neural Network Based Prediction.")
-#             ax.set_xlabel("Evaluation Point")
-#             ax.set_ylabel("Score")
-#             ax.set_ylim([0.5,1.05])
-#             tx = np.array(range(len(y)))*seq
-#             ax.set_xlim([0, 1.5*tx[-1]])
-#             tx = [tu*seq for tu in tx]
-#             ax.plot(tx, y, "x")
-#             if float(score) < 0.93:
-#                 print score, "Compromised"
-#             else:
-#                 print score
-#             print x
-#             break
-
-
-
-# a = anim.FuncAnimation(fig, update, frames=int(SIM_TIME/(SIM_STEP*seq)), repeat=False)
-# plt.show()
 
 pred= model.predict(test_data,batch_size=1,verbose=1)
+prediction = pred.tolist()
+predict_list_temp = list(sum(prediction, []))
+predict_list = list(sum(predict_list_temp, []))
+
 
 predict=np.reshape(pred,(260,10))
 plt.plot(predict)
+plt.ylim(0.93,1.0)
+plt.xlim(20,260)
+plt.title("Neural Network Based Prediction.")
+plt.xlabel("Evaluation Point")
+plt.ylabel("Score")
 plt.show()

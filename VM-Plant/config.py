@@ -1,11 +1,11 @@
 
-FIELD_IP = '172.27.22.102'#ip wiSumpLow change according to Virtual Machines IP's
+FIELD_IP = '172.27.30.94'#ip wiSumpLow change according to Virtual Machines IP's
 FIELD_PORT = 6061
 
 #OPC_IP = '192.168.1.11'
 #OPC_PORT = 6060
 
-SIM_TIME = 270
+SIM_TIME = 260
 SIM_STEP = 0.1
 #Process Variables
 

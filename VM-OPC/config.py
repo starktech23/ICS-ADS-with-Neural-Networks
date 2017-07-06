@@ -1,9 +1,9 @@
 
 
-OPC_IP = '172.27.22.102'
+OPC_IP = '172.27.30.94'
 OPC_PORT = 6060
 
-FIELD_IP = '172.27.22.102'#ip wiSumpLow change according to Virtual Machines IP's
+FIELD_IP = '172.27.30.94'#ip wiSumpLow change according to Virtual Machines IP's
 FIELD_PORT = 6061
 
 
